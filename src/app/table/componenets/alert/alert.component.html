@@ -1,0 +1,7 @@
+<ng-container *ngIf="message!==''" >
+<div *ngFor=" let i of message"  class="absolute right-0 top-20 bg-gray-700 px-5 py-3 bg-opacity-20 ackdrop-blur-md backdrop-filter  rounded-l-xl shadow">
+    <span class= "rounded-full text-green-600 font-semibold drop-shadow capitalize">{{i}}</span>
+    <div class="anom h-[2px] drop-shadow mt-2 bg-gray-400" [ngClass]="''"></div>
+
+</div>
+</ng-container>

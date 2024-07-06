@@ -1,0 +1,32 @@
+<div class="w-full mt-2 grid grid-cols-12 bg-gray-100 dark:bg-slate-950 p-2 rounded-lg">
+    <span class="text-sm text-gray-700 dark:text-gray-400 col-span-4">
+        Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span class="font-semibold text-gray-900 dark:text-white">{{paginationService.visibleArray.length}}</span> of <span class="font-semibold text-gray-900 dark:text-white">{{filterService.filtredData.length}}</span> Entries
+    </span>
+    <div class="flex flex-row justify-center xs:mt-0 col-span-4">   
+      <button (click)="paginationService.prevPage()" class="flex items-center justify-center px-3 h-6 text-sm font-medium text-gray-500 bg-gray-200 hover:bg-gray-300 rounded-l hover:text-gray-400  dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+          </svg>
+          Prev
+      </button>
+        <select [(ngModel)]="paginationService.visiblePage"  (change)="paginationService.onSelectChange('pages')"  class="bg-gray-50 border outline-none border-gray-300 px-3  justify-center text-gray-900 text-sm p-[0.6px] focus:ring-blue-500 focus:border-blue-500  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 appearance-none relative z-10">
+          <option *ngFor="let num of paginationService.PagesOptionsArray" [value]="num">{{ num }}</option>
+        </select>  
+        <button (click)="paginationService.nextPage()" class="flex items-center justify-center px-3 h-6 text-sm font-medium hover:text-gray-400 text-gray-500 bg-gray-200 rounded-r hover:bg-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Next
+            <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+          </svg>
+        </button> 
+      </div>
+      <div class="flex flex-row col-span-4 justify-end gap-2">
+        <label for="rowss" class="block  text-sm font-medium text-gray-900 dark:text-white">Rows number</label>
+        <select [(ngModel)]="paginationService.visibleItems"  (change)="paginationService.onSelectChange('rows')" class="bg-gray-50 border rounded-lg border-gray-300 px-3  justify-center text-gray-900 text-sm p-[0.6px] focus:rounded-t-none focus:ring-blue-500 focus:border-blue-500  outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 appearance-none relative z-10">
+            <option value="10">10</option>
+            <option value="15">15</option> 
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+          </select> 
+      </div>
+  </div>

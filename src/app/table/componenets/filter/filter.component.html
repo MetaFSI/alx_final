@@ -1,0 +1,439 @@
+<button
+  (click)="showModal = !showModal"
+  class="flex text-gray-400 dark:text-white focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm text-center items-center dark:focus:ring-blue-800"
+  type="button"
+>
+  <svg
+    [ngClass]="tableService.pined ? 'hidden' : ''"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="2"
+    stroke="currentColor"
+    class="w-4 h-4"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M6 13.5V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 9.75V10.5"
+    />
+  </svg>
+</button>
+<div
+  [ngClass]="showModal && !tableService.pined ? 'block' : 'hidden'"
+  class="absolute cursor-move z-auto -mt-11 -ml-32 p-0"
+>
+  <div
+    ngDraggable
+    [inBounds]="true"
+    (mousedown)="tableService.onMouseDown($event)"
+    (mousemove)="tableService.onMouseMove($event, element)"
+  >
+    <div
+      class="m-0 py-1 px-2 relative cursor-move bg-gray-300 rounded-lg shadow dark:bg-gray-200"
+    >
+      <div class="flex items-center gap-2">
+        <label
+          for="text"
+          class="cursor-move select-none flex text-sm font-medium text-gray-900 dark-text-white items-center gap-1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-4 h-4 text-gray-500 dark:text-gray-800"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
+            />
+          </svg>
+        </label>
+        <button
+          (click)="show = !show"
+          class="select-none text-gray-500 dark:text-gray-600"
+        >
+          <span class="bg-white text-gray-900 px-2 rounded-lg mr-2">{{
+            item.shortName
+          }}</span>
+          <span class="capitalize">{{
+            colName === item.name && selectedOption !== "rest"
+              ? selectedOption
+              : " select option "
+          }}</span>
+        </button>
+        <button
+          (click)="showModal = !showModal"
+          type="button"
+          class="ml-auto text-gray-400 bg-transparenthover:bg-red-700 hover:text-red-600 rounded-lg text-sm w-3 h-3 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover-text-red-700"
+        >
+          <svg
+            class="w-2 h-2"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <div
+        *ngIf="show"
+        class="absolute bg-white divide-gray-100 rounded-lg shadow dark:bg-white"
+      >
+        <ul
+          class="py-2 text-sm cursor-pointer text-gray-700 dark:text-gray-800"
+          aria-labelledby="dropdownDelayButton"
+        >
+          <li class="bg-slate-300 rounded-t-lg">
+            <a
+              (click)="filterService.filterOptionHandler('aTOz', item)"
+              class="flex gap-2 px-4 py-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25"
+                />
+              </svg>
+              <p class="flex gap-1 justify-center items-center">
+                <span>{{ item.type === "text" ? "A" : "high" }} </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                  />
+                </svg>
+                <span>{{ item.type === "text" ? "Z" : "low" }} </span>
+              </p>
+            </a>
+          </li>
+          <li class="bg-slate-300 shadow-sm">
+            <a
+              (click)="filterService.filterOptionHandler('zTOa', item)"
+              class="flex gap-2 px-4 py-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12"
+                />
+              </svg>
+              <p class="flex gap-1 justify-center items-center">
+                <span>{{ item.type === "text" ? "Z" : "low" }} </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                  />
+                </svg>
+
+                <span>{{ item.type === "text" ? "A" : "high" }} </span>
+              </p>
+            </a>
+          </li>
+          <ng-container *ngFor="let i of tableService.filterOptions">
+            <li
+              [ngClass]="{
+                'border-l-2 border-gray-700 bg-gray-200 animate-fade animate-duration-[400ms] animate-ease-in-out':
+                  selectedOption === i.value &&
+                  colName === item.name &&
+                  selectedOption !== 'rest',
+                'bg-slate-300 shadow rounded-b-lg': i.value === 'rest'
+              }"
+              *ngIf="item.type === 'text' && i.type === 'text'"
+            >
+              <a
+                (click)="
+                  filterService.filterOptionHandler(i.value, item);
+                  selectOption(i.value, item.name);
+                  i.value !== 'rest' ? (show = false) : ''
+                "
+                class="flex gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              >
+                <div [innerHTML]="sanitizeHtml(i.icon)"></div>
+                <p>{{ i.name }}</p>
+              </a>
+            </li>
+            <li
+              [ngClass]="{
+                'border-l-2 border-gray-700 bg-gray-200 animate-fade animate-duration-[400ms] animate-ease-in-out':
+                  selectedOption === i.valueA &&
+                  colName === item.name &&
+                  selectedOption !== 'rest',
+                'bg-slate-300 shadow rounded-b-lg': i.valueA === 'rest'
+              }"
+              *ngIf="item.type !== 'text' && i.type === 'number'"
+            >
+              <a
+                (click)="
+                  filterService.filterOptionHandler(i.valueA, item);
+                  selectOption(i.valueA, item.name);
+                  i.valueA !== 'rest' ? (show = false) : ''
+                "
+                class="flex gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+              >
+                <div [innerHTML]="sanitizeHtml(i.iconA)"></div>
+                <p>{{ i.nameA }}</p>
+              </a>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+
+      <input
+        *ngIf="
+          selectedOption !== null &&
+          colName === item.name &&
+          selectedOption !== 'rest'
+        "
+        (input)="
+          filterService.applyFilter(tableService.data); filterExHandler()
+        "
+        [(ngModel)]="
+          this.filterService.filterInput[
+            this.filterService.findIndexByName(item.name)
+          ].content
+        "
+        [type]="item.type"
+        class="select-none dark:bg-gray-50 mt-1 shadow focus:border-none border-none focus:ring-0 font-normal text-gray-900 text-xs rounded-lg block w-full px-2.5 py-1 dark-bg-gray-600 dark-placeholder-gray-400 dark-text-white"
+        placeholder="Enter to see magic"
+        required
+      />
+    </div>
+  </div>
+</div>
+<div class="relative flex mb-1" [ngClass]="tableService.pined ? '' : 'hidden'">
+  <div class="form">
+    <div class="form-items">
+      <input
+        [ngClass]="
+          item.type === 'date'
+            ? ' dark:text-slate-900 text-white  dark:active:text-white'
+            : 'text-gray-500 dark:text-white'
+        "
+        (input)="
+          filterService.applyFilter(tableService.data); filterExHandler()
+        "
+        [(ngModel)]="
+          this.filterService.filterInput[
+            this.filterService.findIndexByName(item.name)
+          ].content
+        "
+        [type]="item.type"
+        class="select-none bg-transparent outline-none font-normal text-sm rounded-lg focus:outline-none focus:ring-0 border-none focus:border-none block w-full px-2.5 py-1 dark-text-white"
+        required
+        autocomplete="off"
+      />
+      <label class="dark:text-white"
+        ><span>{{ item.name }}</span></label
+      >
+    </div>
+  </div>
+  <button
+    (click)="show = !show"
+    class="select-none text-gray-600 dark:text-gray-100"
+  >
+    <p
+      class="bg-white text-[8px] cursor-pointer text-gray-600 dark:bg-gray-900 dark:text-white rounded-lg flex justify-center items-center"
+    >
+      <span
+        class="hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer select-none"
+      >
+        {{ item.shortName }}</span
+      >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        class="w-6 h-6 cursor-pointer"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+        />
+      </svg>
+    </p>
+  </button>
+  <div
+    *ngIf="show"
+    class="absolute mt-8 ml-7 bg-white divide-gray-100 rounded-lg shadow dark:bg-white"
+  >
+    <ul
+      class="py-2 text-sm cursor-pointer text-gray-700 dark:text-gray-800"
+      aria-labelledby="dropdownDelayButton"
+    >
+      <li class="bg-slate-300 rounded-t-lg">
+        <a
+          (click)="filterService.filterOptionHandler('aTOz', item)"
+          class="flex gap-2 px-4 py-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25"
+            />
+          </svg>
+          <p class="flex gap-1 justify-center items-center">
+            <span>{{ item.type === "text" ? "A" : "high" }} </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+              />
+            </svg>
+            <span>{{ item.type === "text" ? "Z" : "low" }} </span>
+          </p>
+        </a>
+      </li>
+      <li class="bg-slate-300 shadow-sm">
+        <a
+          (click)="filterService.filterOptionHandler('zTOa', item)"
+          class="flex gap-2 px-4 py-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12"
+            />
+          </svg>
+          <p class="flex gap-1 justify-center items-center">
+            <span>{{ item.type === "text" ? "Z" : "low" }} </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+              />
+            </svg>
+
+            <span>{{ item.type === "text" ? "A" : "high" }} </span>
+          </p>
+        </a>
+      </li>
+      <ng-container *ngFor="let i of tableService.filterOptions">
+        <li
+          [ngClass]="{
+            'border-l-2 border-gray-700 bg-gray-200 animate-fade animate-duration-[400ms] animate-ease-in-out':
+              selectedOption === i.value &&
+              colName === item.name &&
+              selectedOption !== 'rest',
+            'bg-slate-300 shadow rounded-b-lg': i.value === 'rest'
+          }"
+          *ngIf="item.type === 'text' && i.type === 'text'"
+        >
+          <a
+            (click)="
+              filterService.filterOptionHandler(i.value, item);
+              selectOption(i.value, item.name);
+              i.value !== 'rest' ? (show = false) : ''
+            "
+            class="flex gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+          >
+            <div [innerHTML]="sanitizeHtml(i.icon)"></div>
+            <p>{{ i.name }}</p>
+          </a>
+        </li>
+        <li
+          [ngClass]="{
+            'border-l-2 border-gray-700 bg-gray-200 animate-fade animate-duration-[400ms] animate-ease-in-out':
+              selectedOption === i.valueA &&
+              colName === item.name &&
+              selectedOption !== 'rest',
+            'bg-slate-300 shadow rounded-b-lg': i.valueA === 'rest'
+          }"
+          *ngIf="item.type !== 'text' && i.type === 'number'"
+        >
+          <a
+            (click)="
+              filterService.filterOptionHandler(i.valueA, item);
+              selectOption(i.valueA, item.name);
+              i.valueA !== 'rest' ? (show = false) : ''
+            "
+            class="flex gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+          >
+            <div [innerHTML]="sanitizeHtml(i.iconA)"></div>
+            <p>{{ i.nameA }}</p>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</div>

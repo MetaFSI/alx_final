@@ -1,0 +1,322 @@
+<div class="flex items-center gap-3">
+    <div [ngClass]="colControle&&!tableService.filter?'w-[30rem] grid grid-cols-8':colControle&&tableService.filter? filterHistory.saveFilterIcon?'w-[40rem] grid grid-cols-10':'w-[38rem] grid grid-cols-9':'flex items-center w-[67%]'"  class="h-8 mb-7 dark:bg-gray-800 bg-gray-200 rounded-lg">
+     
+      <div class="flex justify-center hover:bg-white dark:hover:bg-gray-900 " *ngIf="colControle">
+        <button data-tooltip-target="tooltip-home" (click)="exImportService.dropDown=!exImportService.dropDown"  type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-white">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+          </svg>
+          <span class="sr-only">
+            Excel options 
+          </span>
+          </button>
+          
+        <div id="tooltip-home" role="tooltip" class="tip absolute z-10 invisible inline-block px-3 text-sm font-medium text-gray-100 transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-white dark:text-gray-700">
+          Excel options
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+          <!-- Dropdown menu -->
+          <div *ngIf="exImportService.dropDown" class="z-10 left-3 top-12 absolute bg-white divide-y divide-gray-100 rounded-lg shadow  dark:bg-gray-700">
+              <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="multiLevelDropdownButton">
+                <li class="px-3 py-2 dark:hover:bg-gray-800 hover:bg-gray-50">
+                  <div class="flex gap-2">
+                    <label for="up" class="cursor-pointer flex items-center gap-1 animate-fade-down animate-duration-700 animate-ease-in-out">
+                      <span class="font-medium text-gray-500 capitalize drop-shadow-sm">{{exImportService.fileName!==''?exImportService.fileName:'import'}}</span>
+                      <svg  *ngIf="exImportService.upload" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15m0-3l-3-3m0 0l-3 3m3-3V15" />
+                      </svg> 
+                      <input id="up" type="file" (change)="exImportService.onFileChange($event)" class="hidden" />
+                    </label>
+                    <button *ngIf="exImportService.apply" (click)="exImportService.appyExcel();exImportService.dropDown=!exImportService.dropDown" class="hover:text-green-600 animate-fade-right animate-duration-700 animate-ease-in-out">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>    
+                    </button>
+                    <button *ngIf="exImportService.clear" (click)="exImportService.clearExcel();exImportService.dropDown=!exImportService.dropDown" class="hover:text-red-500 animate-fade-right animate-duration-700 animate-ease-in-out">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>    
+                    </button>
+                  </div>
+                </li>
+                <li class="px-3 py-2 flex justify-center dark:hover:bg-gray-800 hover:bg-gray-50">
+                  <button (click)=" exExportService.exportToExcel();exImportService.dropDown=!exImportService.dropDown" class="animate-fade-up animate-duration-700 animate-ease-in-out" type="button">  
+                   <div class="flex gap-2">
+                    <span class="font-medium text-gray-500 capitalize drop-shadow-sm"> Export</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6  text-gray-500 dark:text-white">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15M9 12l3 3m0 0l3-3m-3 3V2.25" />
+                    </svg> 
+                   </div>
+      
+                  </button>
+                </li>
+              </ul>
+          </div>
+
+      </div>
+
+      <div  class="flex justify-center hover:bg-white dark:hover:bg-gray-900" *ngIf="colControle">
+        <button (click)="col_Controle()" data-tooltip-target="tooltip-columncontrol" type="button" class="inline-flex flex-col items-center justify-center px-5  group">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-white">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>        
+            <span class="sr-only">Column control</span>
+        </button>
+        <div id="tooltip-columncontrol" role="tooltip" class="tip absolute z-10 invisible inline-block px-3 text-sm font-medium text-gray-100 transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-white dark:text-gray-700">
+          Column control
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+      </div>
+      <div  class="flex justify-center hover:bg-white dark:hover:bg-gray-900" *ngIf="colControle">
+        <button (click)="tableService.updateAnswer=!tableService.updateAnswer" data-tooltip-target="tooltip-update" type="button" class="inline-flex flex-col items-center justify-center px-5  group">
+          <svg *ngIf="!tableService.updateAnswer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-white">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+          </svg> 
+          <svg  *ngIf="tableService.updateAnswer"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gray-500 dark:text-white">
+            <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z" />
+            <path d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />
+          </svg>
+               
+            <span class="sr-only">Update items</span>
+        </button>
+        <div id="tooltip-update" role="tooltip" class="tip absolute z-10 invisible inline-block px-3 text-sm font-medium text-gray-100 transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-white dark:text-gray-700">
+          Update items
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+      </div>
+   
+      
+
+      <div [ngClass]="tableService.filter?'bg-gray-400 dark:bg-white dark:hover:bg-gray-100 rounded-lg':'hover:bg-gray-50 dark:hover:bg-gray-900'" class="flex px-5 justify-center gap-2 " *ngIf="colControle">
+        <button (click)="tableService.optionsSwitcher('filter')" data-tooltip-target="tooltip-filter" type="button" class="inline-flex flex-col items-center justify-center group ">
+          <svg *ngIf="!tableService.filter" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"  [ngClass]="  tableService.filter?'text-white  dark:text-gray-700':'dark:text-white text-gray-500' " class="w-6 h-6 ">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
+          </svg> 
+          <svg *ngIf="tableService.filter" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gray-100 dark:text-gray-600 drop-shadow">
+            <path fill-rule="evenodd" d="M3.792 2.938A49.069 49.069 0 0112 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 011.541 1.836v1.044a3 3 0 01-.879 2.121l-6.182 6.182a1.5 1.5 0 00-.439 1.061v2.927a3 3 0 01-1.658 2.684l-1.757.878A.75.75 0 019.75 21v-5.818a1.5 1.5 0 00-.44-1.06L3.13 7.938a3 3 0 01-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836z" clip-rule="evenodd" />
+          </svg>          
+            <span class="sr-only">Filter</span>
+        </button>
+        <div id="tooltip-filter" role="tooltip" class="tip absolute z-10 invisible inline-block px-3 text-sm font-medium text-gray-100 transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-white dark:text-gray-700">
+            Filter
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+        <div *ngIf="tableService.filter" class="flex">
+            <button (click)="pinHanlder()"  type="button" class="inline-flex flex-col items-center justify-center group">               
+              <svg *ngIf="!tableService.pined" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+              </svg>  
+              <svg  *ngIf="tableService.pined" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+              </svg>      
+            </button>
+          </div>
+      </div>
+      <div class="flex justify-center hover:bg-white dark:hover:bg-gray-900 " *ngIf="colControle">
+        <button (click)="calculatorHandler()"  data-tooltip-target="tooltip-clc" type="button" class="inline-flex flex-col items-center justify-center px-5  group">
+          <svg *ngIf="!calculatorService.calculator"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-white">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V13.5zm0 2.25h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V18zm2.498-6.75h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V13.5zm0 2.25h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V18zm2.504-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zm0 2.25h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V18zm2.498-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zM8.25 6h7.5v2.25h-7.5V6zM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 002.25 2.25h10.5a2.25 2.25 0 002.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0012 2.25z" />
+          </svg>
+          <svg *ngIf="calculatorService.calculator" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gray-500 dark:text-white">
+            <path fill-rule="evenodd" d="M6.32 1.827a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V19.5a3 3 0 01-3 3H6.75a3 3 0 01-3-3V4.757c0-1.47 1.073-2.756 2.57-2.93zM7.5 11.25a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H8.25a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H8.25zm-.75 3a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H8.25a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V18a.75.75 0 00-.75-.75H8.25zm1.748-6a.75.75 0 01.75-.75h.007a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.007a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.335.75.75.75h.007a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75h-.007zm-.75 3a.75.75 0 01.75-.75h.007a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.007a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.335.75.75.75h.007a.75.75 0 00.75-.75V18a.75.75 0 00-.75-.75h-.007zm1.754-6a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75h-.008zm-.75 3a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V18a.75.75 0 00-.75-.75h-.008zm1.748-6a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008zm.75 1.5a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75h-.008zm-8.25-6A.75.75 0 018.25 6h7.5a.75.75 0 01.75.75v.75a.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75v-.75zm9 9a.75.75 0 00-1.5 0V18a.75.75 0 001.5 0v-2.25z" clip-rule="evenodd" />
+          </svg>             
+            <span class="sr-only">Calculator</span>
+        </button>
+        <div id="tooltip-clc" role="tooltip" class="tip absolute z-10 invisible inline-block px-3 text-sm font-medium text-gray-100 transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-white dark:text-gray-700">
+         Calculator
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
+      </div>
+
+      <div  class="flex justify-center hover:bg-gray-50 dark:hover:bg-gray-900" *ngIf="colControle">
+        <button (click)="tableService.optionsSwitcher('actions')" data-tooltip-target="tooltip-actions" type="button" class="inline-flex flex-col items-center justify-center px-5 group">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500 dark:text-white">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+           <span class="sr-only">actions</span>
+       </button> 
+       <div id="tooltip-actions" role="tooltip" class="tip absolute z-10 invisible inline-block px-3  text-sm font-medium text-gray-100 transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-white dark:text-gray-700">
+           Actions
+           <div class="tooltip-arrow" data-popper-arrow></div>
+       </div>
+      </div>
+
+      <div  class="flex justify-center hover:bg-gray-50 dark:hover:bg-gray-900 " *ngIf="colControle">
+        <button (click)="keyboardHandler()"  data-tooltip-target="tooltip-keyboard" type="button" class="inline-flex flex-col items-center justify-center px-5 group">
+          <svg [ngClass]="keyboardService.keyboard?'text-gray-800':''" xmlns="http://www.w3.org/2000/svg" width="30" height="30"  stroke-width="1" fill="currentColor" class="bi bi-keyboard text-gray-500 dark:text-white" viewBox="0 0 16 16">
+             <path d="M14 5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h12zM2 4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H2z"/> 
+             <path d="M13 10.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm0-2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm-5 0A.25.25 0 0 1 8.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 8 8.75v-.5zm2 0a.25.25 0 0 1 .25-.25h1.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-1.5a.25.25 0 0 1-.25-.25v-.5zm1 2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm-5-2A.25.25 0 0 1 6.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 6 8.75v-.5zm-2 0A.25.25 0 0 1 4.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 4 8.75v-.5zm-2 0A.25.25 0 0 1 2.25 8h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 2 8.75v-.5zm11-2a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm-2 0a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm-2 0A.25.25 0 0 1 9.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 9 6.75v-.5zm-2 0A.25.25 0 0 1 7.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 7 6.75v-.5zm-2 0A.25.25 0 0 1 5.25 6h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5A.25.25 0 0 1 5 6.75v-.5zm-3 0A.25.25 0 0 1 2.25 6h1.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-1.5A.25.25 0 0 1 2 6.75v-.5zm0 4a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25v-.5zm2 0a.25.25 0 0 1 .25-.25h5.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-5.5a.25.25 0 0 1-.25-.25v-.5z"/> 
+          </svg>
+           <span class="sr-only">keyboard</span>
+       </button> 
+       <div id="tooltip-keyboard" role="tooltip" class="tip absolute z-10 invisible inline-block px-3  text-sm font-medium text-gray-100 transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-white dark:text-gray-700">
+           keyboard navigation
+           <div class="tooltip-arrow" data-popper-arrow></div>
+       </div>
+      </div>
+
+      <div  class="flex text-sky-500 hover:text-gray-500 justify-center rounded-lg bg-gray-300 dark:bg-gray-600 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-900" *ngIf="colControle">
+        <button (click)="filterHistory.saveArrayofIds()" data-tooltip-target="tooltip-new" type="button" class="inline-flex flex-col items-center   justify-center px-5 group">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>              
+           <span class="sr-only">new</span>
+       </button>
+       <div id="tooltip-new" role="tooltip" class="tip absolute z-10 invisible inline-block px-3  text-sm font-medium dark:text-white text-gray-800 bg-gray-200  transition-opacity duration-300 dark:bg-gray-700 rounded-lg shadow-sm opacity-0 tooltip ">
+           Add item
+           <div class="tooltip-arrow" data-popper-arrow></div>
+       </div>
+      </div>
+
+      <div class="flex justify-center " *ngIf="colControle&&tableService.filter&&filterHistory.saveFilterIcon">
+        <button  (click)="filterHistory.saveFilter()" data-tooltip-target="tooltip-fhs" type="button" class="inline-flex flex-col items-center   justify-center px-5 group">             
+          <svg *ngIf="!filterHistory.filterSaved" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-800 dark:text-gray-300">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+          </svg>    
+          <svg *ngIf="filterHistory.filterSaved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gray-800 dark:text-gray-300">
+            <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 00-5.98 6.496A5.25 5.25 0 006.75 20.25H18a4.5 4.5 0 002.206-8.423 3.75 3.75 0 00-4.133-4.303A6.001 6.001 0 0010.5 3.75zm2.03 5.47a.75.75 0 00-1.06 0l-3 3a.75.75 0 101.06 1.06l1.72-1.72v4.94a.75.75 0 001.5 0v-4.94l1.72 1.72a.75.75 0 101.06-1.06l-3-3z" clip-rule="evenodd" />
+          </svg>                
+       </button>
+       <div id="tooltip-fhs" role="tooltip" class="tip absolute z-10 invisible inline-block px-3  text-sm font-medium dark:text-white text-gray-800 bg-gray-200  transition-opacity duration-300 dark:bg-gray-700 rounded-lg shadow-sm opacity-0 tooltip ">
+          Save Filter
+           <div class="tooltip-arrow" data-popper-arrow></div>
+       </div>
+      </div>
+
+      <div class="flex justify-center " *ngIf="colControle&&tableService.filter">
+        <button (click)="filterHistory.filterHistory=!filterHistory.filterHistory" data-tooltip-target="tooltip-filterHistory" type="button" class="inline-flex flex-col items-center   justify-center px-5 group">             
+          <svg *ngIf="!filterHistory.filterHistory"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-800 dark:text-gray-300">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg> 
+          <svg *ngIf="filterHistory.filterHistory" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gray-800 dark:text-gray-300">
+            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clip-rule="evenodd" />
+          </svg>                   
+       </button>
+       <div id="tooltip-filterHistory" role="tooltip" class="tip absolute z-10 invisible inline-block px-3  text-sm font-medium dark:text-white text-gray-800 bg-gray-200  transition-opacity duration-300 dark:bg-gray-700 rounded-lg shadow-sm opacity-0 tooltip ">
+          Filter history
+           <div class="tooltip-arrow" data-popper-arrow></div>
+       </div>
+      </div>
+
+      <div *ngIf="!colControle" class="flex animate-fade-right animate-duration-500 animate-ease-in-out">
+      
+        <p *ngFor="let item of tableService.mainDataControle,let index=index " [class]="'animate-duration-'+(index+1)+'00'"  class="select-none flex gap-2 dark:text-gray-900 text-sm font-medium items-center bg-slate-300 rounded-full px-2 mr-2 group animate-fade-down animate-ease-in-out ">      
+            <span class="select-none" >{{item.name}}</span>
+
+          <button class="animate-pulse animate-once animate-duration-500 animate-ease-in-out" [id]="index+'a'" *ngIf="!isHidden(item.name)" (click)="colHandler('remove',item)">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg> 
+          </button>
+
+          <button class="animate-pulse animate-once animate-duration-500 animate-ease-in-out" [id]="index+'b'"  *ngIf="isHidden(item.name)" (click)="colHandler('add',item)">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+            </svg>
+          </button>          
+          
+        </p>
+      </div>
+      <div *ngIf="!colControle" class="ml-10 flex items-center">
+        <button class="dark:text-white text-gray-800 " (click)="col_Controle()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>   
+        </button>
+      </div>
+    
+    </div>
+    <div *ngIf="savehandler()" class="h-8 mb-7 flex justify-center items-center">
+      <button  class="text-gray-700 dark:text-gray-200 hover:text-green-600" data-tooltip-target="tooltip-save" (click)="tableService.saveObject()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>        
+      </button>
+      <div id="tooltip-save" role="tooltip" class="tip absolute z-10 invisible inline-block px-3  text-sm font-medium dark:text-white text-gray-800 bg-gray-200  transition-opacity duration-300 dark:bg-gray-700 rounded-lg shadow-sm opacity-0 tooltip ">
+        Save changes
+         <div class="tooltip-arrow" data-popper-arrow></div>
+     </div>
+    </div>
+  
+   <div *ngIf="filterHistory.filterHistory">
+    <app-filter-history/>
+   </div>
+
+  <!-- invoice -->
+   <div *ngIf="calculatorService.calculator" class="h-8 mb-7 flex gap-2 justify-center items-center rounded-lg bg-gray-300 dark:bg-gray-700 px-3 py-4 animate-fade-left animate-duration-300 animate-ease-in-out">
+    <div class="form animate-jump animate-duration-[600ms] animate-ease-in-out"  >
+      <div class="form-items">
+        <input [(ngModel)]="calculatorService.amount"   type="text"class="w-20 h-6 bg-gray-300 dark:bg-gray-600 border border-dashed  dark:text-white select-none outline-none font-normal text-sm rounded-lg focus:outline-none   focus:ring-0 focus:border-none  block px-2.5 py-1   dark-text-white" required autocomplete="off"  >
+        <label class="dark:text-white  text-white drop-shadow text-[14px] font-medium "><span >Amount</span></label>
+      </div>
+    </div>
+    <div class="form animate-jump-in animate-duration-[600ms] animate-ease-in-out"  >
+      <div class="form-items">
+        <input [(ngModel)]="calculatorService.range"    type="text"class="w-20 h-6 bg-gray-300 dark:bg-gray-600 border border-dashed  dark:text-white select-none outline-none font-normal text-sm rounded-lg focus:outline-none   focus:ring-0 focus:border-none  block px-2.5 py-1   dark-text-white" required autocomplete="off"  >
+        <label class="dark:text-white  text-white drop-shadow text-[14px] font-medium "><span >Range</span></label>
+      </div>
+    </div>
+    <div  class="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-500 justify-center rounded-lg dark:hover:text-gray-200">
+<div class="flex items-center" *ngIf="calculatorService.start">
+  <button (click)="calculatorService.generateItems()" data-tooltip-target="tooltip-new" type="button" class="inline-flex flex-col items-center   justify-center group animate-fade-right animate-duration-[600ms] animate-ease-in-out">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>            
+     <span class="sr-only">Generate</span>
+ </button>
+  <div id="tooltip-new" role="tooltip" class="tip absolute z-10 invisible inline-block px-3  text-sm font-medium dark:text-white text-gray-800 bg-gray-200  transition-opacity duration-300 dark:bg-gray-700 rounded-lg shadow-sm opacity-0 tooltip ">
+    Generate items
+    <div class="tooltip-arrow" data-popper-arrow></div>
+</div>
+</div>
+<div class="flex items-center"  *ngIf="!calculatorService.start">
+  <button  (click)="calculatorService.done()" data-tooltip-target="tooltip-done" type="button" class="inline-flex flex-col items-center   justify-center group animate-fade-up animate-duration-[600ms] animate-ease-in-out">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>                
+     <span class="sr-only">Done</span>
+   </button>
+
+   <div id="tooltip-done" role="tooltip" class="tip absolute z-10 invisible inline-block px-3  text-sm font-medium dark:text-white text-gray-800 bg-gray-200  transition-opacity duration-300 dark:bg-gray-700 rounded-lg shadow-sm opacity-0 tooltip ">
+    Done
+    <div class="tooltip-arrow" data-popper-arrow></div>
+  </div>
+</div>
+    </div>
+   </div>
+  </div>
+  <!-- calculator -->
+  <div *ngIf="sum!==0" class="absolute top-3 right-5">
+    <div class="flex items-center ">
+      <div class="flex gap-2">
+        <div>
+          <button *ngIf="calculatorService.refresh" (click)="filterService.applyFilter(filterService.filtredData);calculatorService.refresh=false"  class="text-gray-600 dark:text-gray-400 animate-fade-up animate-duration-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>          
+          </button>
+        </div>
+
+        <span class="text-gray-600 dark:text-gray-400 animate-fade-up animate-duration-500">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V13.5zm0 2.25h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V18zm2.498-6.75h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V13.5zm0 2.25h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V18zm2.504-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zm0 2.25h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V18zm2.498-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zM8.25 6h7.5v2.25h-7.5V6zM12 2.25c-1.892 0-3.758.11-5.593.322C5.307 2.7 4.5 3.65 4.5 4.757V19.5a2.25 2.25 0 002.25 2.25h10.5a2.25 2.25 0 002.25-2.25V4.757c0-1.108-.806-2.057-1.907-2.185A48.507 48.507 0 0012 2.25z" />
+          </svg>      
+        </span>
+      </div>
+      <div class="flex flex-col p-0 m-0">
+        <span class=" text-sky-600 dark:text-sky-400 mb-[-6px] font-bold text-[9px]">{{key}}</span>
+        <span class=" text-black dark:text-white font-medium text-[16px] animate-jump-in animate-duration-500 animate-ease-in-out">{{sum.toFixed(2)}}</span>
+      </div>
+    </div>
+  </div>
+  <!-- status -->
+  <div  class="absolute tracking-widest font-medium text-[10px] un capitalize  shadow-sm px-2 dark:bg-gray-400 bg-gray-400 text-white rounded-lg top-[7px] right-[7px] text-center animate-fade-up animate-duration-1000 animate-ease-in-out"><span class="drop-shadow-lg">{{tableService.status}}</span></div>
+
+
+
+
+
+
+  

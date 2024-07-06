@@ -1,0 +1,32 @@
+*,
+*:focus {
+  outline: none;
+  user-select: none;
+}
+*{
+  user-select: none;
+}
+.form-items {
+  position: relative;
+}
+.form-items input {
+  display: block;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+.form-items label {
+  position: absolute;
+  cursor: text;
+  z-index: 4;
+  top: 5px;
+  left: 10px;
+  transition: all 0.3s ease;
+}
+.form-items input:focus + label,
+.form-items input:valid + label {
+  font-size: 7px;
+  top: -5px;
+  
+}
+
+

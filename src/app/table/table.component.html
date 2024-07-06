@@ -1,0 +1,251 @@
+<div class="relative shadow-md rounded-tl-lg  rounded-b-lg m-2 mt-[6.38rem]">
+  <div class="p-3 rounded-tl-lg rounded-b-lg  shadow-sm bg-white dark:bg-gray-900">
+      <app-tool-bar [key]="calculator.header.shortName" [sum]="calculator.sum" [tableElement]="tableElement"/> 
+    <table #myTable (keydown)="keyboardService.handleKeyDown($event)" tabindex="0" class="w-full text-sm text-left "  cdkDropList (cdkDropListDropped)="dragDropService.onColumnDrop($event)">
+      <thead [ngClass]=""class=" text-xs uppercase text-gray-500 dark:text-gray-400">
+          <tr>
+              <th  scope="col" class=" rounded-tl-lg">
+                <div class="flex  items-center">
+                  <label class="checkbox style-e" (change)=" selection.onCheckboxChange()">
+                    <input type="checkbox" [(ngModel)]="selection.isChecked"   />
+                    <div class="checkbox__checkmark"></div>
+                  </label>
+              </div>
+              </th>
+                <th       
+                *ngFor="let item of tableService.mainDataControle,let index=index "            
+                cdkDrag
+                [cdkDragData]="item"            
+                (mouseenter)="dragDropService.onColumnEnter(index)"                    
+                   scope="col"              
+                   [ngClass]="{
+                    'px-6 py-2': !tableService.pined,
+                    'cursor-move headline marching-ants marching animate-pulse  animate-infinite animate-duration-1000 animate-ease-in-out': dragDropService.targetIndex === index && dragDropService.isDragging,
+                    'dark:bg-gray-950 bg-gray-100 ':dragDropService.draggingIndex !== null,  
+                    'hidden':!tableService.isHidden(item.name),
+                    'border':calculator.header.name===item.name &&item.type==='number'             
+                  }"
+                  (cdkDragStarted)="dragDropService.isDragging = true;dragDropService.ondragColumn(index)"
+                  (cdkDragEnded)="dragDropService.isDragging = false;dragDropService.ondragColumn(null)"
+                   class=" envelope" 
+                   cdkDragHandle
+                   [cdkDragDisabled]="tableService.showFilter"   
+                   (dblclick)="calculator.headerClick(item)"  
+                          
+                   >    
+                   <div *cdkDragPreview class="bg-gray-200 dark:bg-slate-800 drop-shadow-lg border-white border dark:text-white px-5 py-2 rounded shadow-2xl">
+                    {{ item.name }} 
+                  </div>
+                    <div [ngClass]="{'animate-jump animate-infinite animate-duration-1000 animate-ease-in-out': dragDropService.targetIndex === index && dragDropService.isDragging}" class="flex items-center gap-1">            
+                        <span [ngClass]="{'drop-shadow-xl text-gray-700 dark:text-white':dragDropService.draggingIndex !== null}"*ngIf="!tableService.pined" >{{item.name}}</span>
+                        <div *ngIf="tableService.showFilter">
+                          <app-filter [index]="index" [item]="item"/>
+                        </div>
+                    </div>                  
+                </th>              
+              <th *ngIf="tableService.actions" scope="col">
+                <span>actions</span>
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of paginationService.visibleArray;let x = index; trackBy:  selection.trackById" >
+            <tr  
+                [ngClass]="{
+                  ' dark:hover:bg-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50': x%2===0,
+                  'dark:hover:bg-gray-700  hover:bg-gray-50 bg-gray-100 dark:bg-gray-900 ': x%2!==0,
+                  'rounded-full border dark:border-gray-200 border-gray-400': x === keyboardService.focusedRowIndex && keyboardService.keyboard  ,
+                  'border-dashed border-t dark:border-gray-700':x !== keyboardService.focusedRowIndex ,
+                     'border border-t border-b border-dashed border-black':tableService.temporaryObj.id===item.id&& tableService.updateAnswer,
+                     ' border dark:border-gray-200 border-gray-400':!tableService.temporaryObj.id===item.id&&x === keyboardService.focusedRowIndex && keyboardService.keyboard 
+                     }"
+               class=" "
+               (click)="keyboardService.keyboard? keyboardService.setFocus(x):''"
+               (dblclick)=" tableService.getObject(item)"
+               [attr.tabindex]="x === keyboardService.focusedRowIndex ? 0 : -1"
+               >
+                <td
+               
+                [ngClass]="{
+                   'bg-gray-400 animate-fade animate-once animate-duration-200 animate-ease-in-out': x === keyboardService.focusedRowIndex && keyboardService.keyboard  && 0 === keyboardService.focusedCellIndex ,    
+                   }"
+                class="w-3  px-2  border-gray-600">
+                    <div class="flex items-center">
+                        <input  type="checkbox" [checked]=" selection.ischeckBoxChecked(item.id)" (click)=" selection.checkBoxHandler(item.id)"  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                    </div>
+                </td>
+                <ng-container  *ngFor="let i of tableService.mainDataControle,let j = index">
+                  <td    
+                  (click)="calculator.getItem(item,i)"      
+                  [ngStyle]="{'background':calculator.markUp(item.id,i.name)&&i.type==='number'?calculator.isColorThemeLight()?'rgb(1 27 67 / 28%)':'#0000009c':''}"
+                   [ngClass]="{
+                    'bg-gray-400 text-white dark:text-white animate-fade-right animate-once animate-duration-200 animate-ease-in-out': x === keyboardService.focusedRowIndex && keyboardService.keyboard  && j+1 === keyboardService.focusedCellIndex,
+                    'border-l border-r ':calculator.header.name===i.name&&i.type==='number'
+                    }" *ngIf="tableService.isString(i.key)&& tableService.isHidden(i.name),"  class=" px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                   <p               
+                   [ngClass]="{'bg-gray-400 text-white dark:text-white': x === keyboardService.focusedRowIndex && keyboardService.keyboard  && j+1 === keyboardService.focusedCellIndex}"
+                   class=" dark:text-gray-400 flex flex-col text-gray-700" *ngIf="tableService.isNumber(item[i.key])">
+                   <span  
+                   *ngIf="tableService.temporaryObj.id!==item.id"
+                   >
+                    {{ item[i.key].toFixed(2)}}
+                   </span>
+                    <span
+                    *ngIf="tableService.temporaryObj.id===item.id"
+                    class="editable-content   w-full p-0 m-0 "        
+                    contenteditable="true"
+                    (input)="tableService.onContentChange($event,i)" [attr.data-input-type]="i.type">
+                    {{ item[i.key].toFixed(2)}}
+                    </span>
+                   </p>
+                   <p [ngClass]="{'bg-gray-400 text-white dark:text-white': x === keyboardService.focusedRowIndex && keyboardService.keyboard  && j+1 === keyboardService.focusedCellIndex}"       class=" text-gray-500 flex flex-col"  *ngIf="!tableService.isNumber(item[i.key])">
+                    <span class="flex flex-col" *ngIf="i.type==='date'">
+                      <span
+                      *ngIf="tableService.temporaryObj.id!==item.id"
+                      >
+                      {{tableService.formatDateString(item[i.key])}}
+                      </span>         
+                      <span
+                      *ngIf="tableService.temporaryObj.id===item.id"
+                      class="editable-content  w-full p-0 m-0 " 
+                      contenteditable="true"
+                      (input)="tableService.onContentChange($event,i)" [attr.data-input-type]="i.type">
+                      {{tableService.formatDateString(item[i.key])}}
+                      </span>
+                    </span>
+                    <span class="flex flex-col" *ngIf="i.type!=='date'">
+                      <span *ngIf="tableService.temporaryObj.id!==item.id">
+                        {{ item[i.key]}}
+                      </span>
+                      <span
+                      *ngIf="tableService.temporaryObj.id===item.id"
+                    class="editable-content   w-full p-0 m-0 " 
+                    contenteditable="true"
+                    (input)="tableService.onContentChange($event,i)" [attr.data-input-type]="i.type">
+                    {{ item[i.key]}}
+                    </span>
+                    </span>        
+                   </p>  
+                  </td>       
+                <ng-container *ngIf="!tableService.isString(i.key)">
+                  <td 
+                  [ngStyle]="{'background':calculator.markUp(item.id,i.name)&&i.type==='number'?calculator.isColorThemeLight()?'rgb(1 27 67 / 28%)':'#0000009c':''}"
+                  (click)="calculator.getItem(item,i)" [ngClass]="{'border-l border-r':calculator.header.name===i.name&&i.type==='number','bg-gray-400 text-white dark:text-white animate-fade-right animate-once animate-duration-200 animate-ease-in-out': x === keyboardService.focusedRowIndex && keyboardService.keyboard  && j+1 === keyboardService.focusedCellIndex}" *ngIf="tableService.isObjectWithTwoKeys(i.key)&&tableService.isHidden(i.name)"  class=" px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <p              
+                    [ngClass]="{'bg-gray-400 text-white dark:text-white': x === keyboardService.focusedRowIndex && keyboardService.keyboard  && j+1 === keyboardService.focusedCellIndex}"
+                    class=" dark:text-gray-400 text-gray-700 flex flex-col"  *ngIf="tableService.isNumber(item[i.key])">         
+                    <span  *ngIf="tableService.temporaryObj.id!==item.id">
+                      {{ item[i['key'].grad1][i['key'].grad2].toFixed(2) }}
+                    </span> 
+                      <span
+                      *ngIf="tableService.temporaryObj.id===item.id"
+                      class="editable-content  w-full p-0 m-0 " 
+                      contenteditable="true"
+                      (input)="tableService.onContentChange($event,i)" [attr.data-input-type]="i.type">
+                      {{ item[i['key'].grad1][i['key'].grad2].toFixed(2) }}
+                      </span>
+                     </p>
+                     <p
+                     [ngClass]="{'bg-gray-400 text-white dark:text-white': x === keyboardService.focusedRowIndex && keyboardService.keyboard  && j+1 === keyboardService.focusedCellIndex}"
+                     class=" text-gray-500" *ngIf="!tableService.isNumber(item[i.key])">                                  
+                        <span *ngIf="i.type==='date'" class="flex flex-col">
+                          <span  *ngIf="tableService.temporaryObj.id!==item.id"> 
+                            {{tableService.formatDateString(item[i['key'].grad1][i['key'].grad2])}}
+                          </span>
+                          <span
+                          *ngIf="tableService.temporaryObj.id===item.id"
+                          class="editable-content  w-full p-0 m-0 " 
+                          contenteditable="true"
+                          (input)="tableService.onContentChange($event,i)" [attr.data-input-type]="i.type">
+                          {{tableService.formatDateString(item[i['key'].grad1][i['key'].grad2])}}
+                          </span>
+                        </span>
+                        <span *ngIf="i.type!=='date'" class="flex flex-col">
+                          <span  *ngIf="tableService.temporaryObj.id!==item.id"> 
+                            {{ item[i['key'].grad1][i['key'].grad2] }} 
+                          </span>                            
+                          <span
+                          *ngIf="tableService.temporaryObj.id===item.id"
+                          class="editable-content  w-full p-0 m-0 " 
+                          contenteditable="true"
+                          (input)="tableService.onContentChange($event,i)" [attr.data-input-type]="i.type">
+                          {{ item[i['key'].grad1][i['key'].grad2] }}  
+                          </span>
+                        </span>             
+                     </p>                  
+                  </td> 
+                  <td 
+                  [ngStyle]="{'background':calculator.markUp(item.id,i.name)&&i.type==='number'?calculator.isColorThemeLight()?'rgb(1 27 67 / 28%)':'#0000009c':''}"
+                  (click)="calculator.getItem(item,i)" [ngClass]="{ 'border-l border-r':calculator.header.name===i.name &&i.type==='number','bg-gray-400 text-white dark:text-white animate-fade-right animate-once animate-duration-200 animate-ease-in-out': x === keyboardService.focusedRowIndex && keyboardService.keyboard  && j+1 === keyboardService.focusedCellIndex,}" *ngIf="!tableService.isObjectWithTwoKeys(i.key)&&tableService.isHidden(i.name)"  class=" px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <p
+                    [ngClass]="{'bg-gray-400 text-white dark:text-white ': x === keyboardService.focusedRowIndex && keyboardService.keyboard  && j+1 === keyboardService.focusedCellIndex}"
+                    class=" dark:text-gray-400 text-gray-700 flex flex-col"  *ngIf="tableService.isNumber(item[i.key])">               
+                    <span  *ngIf="tableService.temporaryObj.id!==item.id">  
+                       {{ item[i['key'].grad1][i['key'].grad2][i['key'].grad3].toFixed(2) }}
+                    </span>                  
+                      <span
+                      *ngIf="tableService.temporaryObj.id===item.id"
+                      class="editable-content  w-full p-0 m-0 " 
+                      contenteditable="true"
+                      (input)="tableService.onContentChange($event,i)" [attr.data-input-type]="i.type">
+                      {{ item[i['key'].grad1][i['key'].grad2][i['key'].grad3].toFixed(2) }}
+                      </span>
+                     </p>
+                     <p 
+                     [ngClass]="{'bg-gray-400 text-white dark:text-white': x === keyboardService.focusedRowIndex && keyboardService.keyboard  && j+1 === keyboardService.focusedCellIndex}"
+                      class=" text-gray-500" *ngIf="!tableService.isNumber(item[i.key])">              
+                      <span *ngIf="i.type==='date'" class="flex flex-col">
+                        <span  *ngIf="tableService.temporaryObj.id!==item.id"> 
+                        {{tableService.formatDateString(item[i['key'].grad1][i['key'].grad2][i['key'].grad3])}}
+                        </span>
+                        <span
+                        *ngIf="tableService.temporaryObj.id===item.id"
+                        class="editable-content  w-full p-0 m-0 " 
+                        contenteditable="true"
+                        (input)="tableService.onContentChange($event,i)" [attr.data-input-type]="i.type">
+                        {{tableService.formatDateString(item[i['key'].grad1][i['key'].grad2][i['key'].grad3])}}
+                        </span>
+
+                      </span>
+                      <span *ngIf="i.type!=='date'" class="flex flex-col">
+                        <span  *ngIf="tableService.temporaryObj.id!==item.id"> 
+                        {{ item[i['key'].grad1][i['key'].grad2][i['key'].grad3] }}
+                        </span>
+                        <span
+                        class="editable-content  w-full p-0 m-0 " 
+                        contenteditable="true"
+                        (input)="tableService.onContentChange($event,i)" [attr.data-input-type]="i.type">
+                        {{ item[i['key'].grad1][i['key'].grad2][i['key'].grad3] }}
+                        </span>
+                      </span> 
+                     </p>       
+                  </td> 
+                </ng-container>  
+                </ng-container>
+                <td [ngClass]="{
+                  'bg-gray-400 text-white dark:text-gray-800 animate-fade-right animate-once animate-duration-200 animate-ease-in-out': x === keyboardService.focusedRowIndex && keyboardService.keyboard  && tableService.mainDataControle.length+1 === keyboardService.focusedCellIndex,
+                }" *ngIf="tableService.actions"  class="px-3 text-gray-600 dark:text-gray-300 py-2 ">
+                  <div class="flex justify-center">
+                    <button (click)="idTrigger(item.id)" class="dark:hover:text-green-500 hover:text-green-600">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                    </svg>
+                    </button>
+                    <button  (click)="idTrigger(item.id)"  class="hover:text-red-600">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>                          
+                    </button>
+                  </div>   
+                </td>
+            </tr>
+        </ng-container>
+      
+    </tbody>
+
+  </table>
+  <app-pagination/>
+  </div>
+</div>
+<app-alert [message]=" tableService.messages"/>

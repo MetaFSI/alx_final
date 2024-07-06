@@ -1,0 +1,9 @@
+.anom{
+    transform: rotateY('angle');
+    animation: an 3s ease-in-out ;
+}
+
+@keyframes an {
+    0%{width: 0%};
+    100%{width: 100%;}
+}
